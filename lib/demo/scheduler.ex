@@ -4,6 +4,6 @@ defmodule Demo.Scheduler do
   require Logger
 
   def cron() do
-    Logger.info("Server runinng ...")
+    Task.start(fn -> HTTPoison.get("https://pg-yash-demo.onrender.com/") end)
   end
 end
