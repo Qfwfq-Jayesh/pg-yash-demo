@@ -11,9 +11,9 @@ defmodule DemoWeb.WebhookController do
   defparams(
     message(%{
       profile_id!: :string,
-      name_on_card!: :string,
+      name_on_card: :string,
       to_phone_number!: :string,
-      is_approved!: :boolean
+      reviewer_action!: :string
     })
   )
 
@@ -27,20 +27,14 @@ defmodule DemoWeb.WebhookController do
   end
 
   def process_request(params) do
-    changeset = message(params)
+    params = params |> transform_params()
+    changeset = params |> message()
 
     if changeset.valid? do
-      metadata = %{
-        "profile_id" => params["profile_id"],
-        "name_on_card" => params["name_on_card"],
-        "to_phone_number" => params["to_phone_number"],
-        "is_approved" => params["is_approved"]
-      }
-
       first_name = get_first_name(params["name_on_card"])
-      client_message = get_client_message(params["is_approved"], first_name)
+      client_message = get_client_message(params["reviewer_action"], first_name)
 
-      Twilio.send_message(params["to_phone_number"], client_message, metadata)
+      Twilio.send_message(params["to_phone_number"], client_message, params)
     else
       Logger.error("Received invalid request body from RD - #{inspect(params)}")
       Logger.error("Task details are - #{inspect(params["tasks"])}")
@@ -48,6 +42,25 @@ defmodule DemoWeb.WebhookController do
       resp = update_response(params)
       Logger.error("Transformed invalid params from RD are - #{inspect(resp)} ")
     end
+  end
+
+  def transform_params(params) do
+    %{
+      "name_on_card" => get_value(params, "philippines_driving_license.nil.name.7.nil"),
+      "to_phone_number" => get_value(params, "nil.nil.mobile_numbers.1.nil"),
+      "reviewer_action" => params["reviewer_action"],
+      "profile_id" => params["profile_id"]
+    }
+  end
+
+  def get_value(params, ref_id) do
+    object =
+      params
+      |> get_in(["resources", "text"])
+      |> Enum.filter(fn text_data -> text_data["ref_id"] == ref_id end)
+      |> List.first()
+
+    if is_map(object), do: Map.get(object, "value", ""), else: ""
   end
 
   def update_response(params) do
@@ -60,15 +73,7 @@ defmodule DemoWeb.WebhookController do
 
   def get_first_name(_), do: ""
 
-  def get_client_message(true, first_name) do
-    get_success_message(first_name)
-  end
-
-  def get_client_message(status, first_name) when is_binary(status) do
-    get_client_message(String.downcase(status), first_name)
-  end
-
-  def get_client_message("true", first_name) do
+  def get_client_message("approved", first_name) do
     get_success_message(first_name)
   end
 
