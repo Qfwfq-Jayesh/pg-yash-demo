@@ -42,7 +42,14 @@ defmodule DemoWeb.WebhookController do
       Twilio.send_message(params["to_phone_number"], client_message, metadata)
     else
       Logger.error("Received invalid request body from RD - #{inspect(params)}")
+
+      resp = update_response(params)
+      Logger.error("Transformed invalid params from RD are - #{inspect(resp)} ")
     end
+  end
+
+  def update_response(params) do
+    params |> put_in(["resources", "images"], nil)
   end
 
   def get_client_message(true) do
