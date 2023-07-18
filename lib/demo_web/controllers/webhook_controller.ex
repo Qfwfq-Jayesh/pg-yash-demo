@@ -50,7 +50,7 @@ defmodule DemoWeb.WebhookController do
   end
 
   def update_response(params) do
-    params |> put_in(["resources", "images"], nil)
+    params |> put_in(["resources", "images"], nil) |> put_in(["tasks"], nil)
   end
 
   def get_first_name(name) when is_binary(name) do
