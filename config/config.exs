@@ -56,6 +56,12 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+config :demo, Demo.Scheduler,
+  jobs: [
+    # Every 30 second
+    {{:extended, "*/30 * * * *"}, {Demo.Scheduler, :cron, []}}
+  ]
+
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
