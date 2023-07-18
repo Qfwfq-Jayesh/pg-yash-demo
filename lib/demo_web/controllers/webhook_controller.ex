@@ -43,6 +43,7 @@ defmodule DemoWeb.WebhookController do
       Twilio.send_message(params["to_phone_number"], client_message, metadata)
     else
       Logger.error("Received invalid request body from RD - #{inspect(params)}")
+      Logger.error("Task details are - #{inspect(params["tasks"])}")
 
       resp = update_response(params)
       Logger.error("Transformed invalid params from RD are - #{inspect(resp)} ")
