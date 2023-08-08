@@ -81,19 +81,21 @@ defmodule DemoWeb.WebhookController do
     get_failure_message(first_name)
   end
 
-  def get_success_message(first_name) do
-    "Hi #{first_name}! Congratulations!
-VERIFIED na iyong requirements, maaari ka nang umattend ng onboarding process para maactivate na ang app. Pumili ng araw nang pagpunta sa link na ito: https://calendly.com/onboarding-cainta
-Siguraduhing good condition ang inyong motor at nasa standard setup.
-
-Dalhin din ang ORIGINAL at VALID (HINDI EXPIRED) na requirements, Android Phone na atleast Version 9.0 (Bawal ang Iphone at Huawei), Ballpen at P1000 (down payment) / P2990 (full payment) para sa iyong Biker Kit na gagamitin. IPAKITA ang text na ito sa venue. Kung ikaw ay Angkas Biker na, DISREGARD this message"
+  def get_success_message(_first_name) do
+    "Approve -
+    Greetings!
+    Nakumpirma na ang iyong mga kinakailangang dokumento, at maaari ka nang dumalo sa proseso ng onboarding upang ma-activate ang app.
+    Tiyakin na nasa magandang kondisyon at nasa standard na setup ang iyong motorsiklo.
+    Mangyaring dalhin ang isang Android Phone na may hindi bababa sa Bersyon 9.0 (Hindi pinapayagan ang iPhone at Huawei), isang ballpoint pen, at either P1000 (down payment) o P2990 (full payment) para sa iyong Biker Kit na gagamitin.
+    Ipakita ang tekstong ito sa venue.
+    Kung ikaw ay isang Angkas Biker na, WAG NA ITONG basahin."
   end
 
-  def get_failure_message(first_name) do
-    "Hi #{first_name}!
-Salamat sa iyong pagsali sa Angkas. Hindi namin mai-process ang inyong application, dahil Blurred or Expired or Wala kang pinasang requirements.
-Kung ikaw ay may kumpleto nang requirements ay maaari ka ng magpareserved ng schedule sa link na ito: https://calendly.com/onboarding-cainta
-Dalhin ang kumpletong requirements sa araw na iyong pinili. Kung walang available schedule ay balikan at icheck ang link sa ibang araw.
-Note: Kung ikaw ay Angkas Biker na, please DISREGARD this message"
+  def get_failure_message(_first_name) do
+    "Hi!
+    Salamat sa iyong pagsali sa Angkas. Hindi namin mai-process ang inyong application, dahil Blurred or Expired or Wala kang pinasang requirements.
+    Kung ikaw ay may kumpleto nang requirements ay maaari ka ng magpareserved ng schedule sa link na ito: https://calendly.com/onboarding-cainta
+    Dalhin ang kumpletong requirements sa araw na iyong pinili. Kung walang available schedule ay balikan at icheck ang link sa ibang araw.
+    Note: Kung ikaw ay Angkas Biker na, please DISREGARD this message"
   end
 end
